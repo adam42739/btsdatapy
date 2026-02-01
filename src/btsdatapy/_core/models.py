@@ -1,10 +1,13 @@
 from dataclasses import dataclass
+from enum import Enum
 from typing import Any
 
 from btsdatapy._core.constants import (
     BASE_URL,
     CONTENT_TYPE,
     DOWNLOAD_ASPX,
+    DOWNLOAD_LOOKUP,
+    LOOKUP_PARAM,
     SH146_NAME_PARAM,
     TABLE_ID_PARAM,
     USER_AGENT,
@@ -55,3 +58,8 @@ class BtsTableRequest:
     def get_headers(self) -> dict[str, Any]:
         self.headers.Referer = self.get_url()
         return self.headers.model_dump(by_alias=True)
+
+
+class LookupTable(Enum):
+    def get_url(self) -> str:
+        return f"{BASE_URL}{DOWNLOAD_LOOKUP}{LOOKUP_PARAM}={self.value}"

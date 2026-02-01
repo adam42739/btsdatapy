@@ -3,7 +3,7 @@ import zipfile
 from unittest.mock import Mock, patch
 
 import pandas as pd
-from btsdatapy._core.clients import BtsAspNetClient
+from btsdatapy._core.clients import BtsAspNetClient, BtsSimpleClient
 from btsdatapy._core.models import BtsTableRequest, BtsTableRequestPayload
 
 
@@ -20,10 +20,11 @@ TEST_HTML_WITH_ASP_NET_STATE = (
     '<input name="__VIEWSTATEGENERATOR" value="VG"/>'
 )
 
-TEST_DATAFRAME = pd.DataFrame({"a": [1], "b": [2]})
-TEST_DATAFRAME_ZIP_BYTES = _make_zip_bytes(
-    TEST_DATAFRAME.to_csv(index=False).encode("utf-8")
-)
+TEST_DATAFRAME_DICT = {"col1": ["val1"], "col2": ["val2"]}
+TEST_DATAFRAME = pd.DataFrame(TEST_DATAFRAME_DICT)
+TEST_DATAFRAME_STRING = TEST_DATAFRAME.to_csv(index=False)
+TEST_DATAFRAME_BYTES = TEST_DATAFRAME_STRING.encode("utf-8")
+TEST_DATAFRAME_ZIP_BYTES = _make_zip_bytes(TEST_DATAFRAME_BYTES)
 
 TEST_TABLE_ID = "test-id"
 TEST_TABLE_NAME = "test-name"
@@ -53,11 +54,31 @@ def test_bts_asp_net_client_fetch_table():
         df = client.fetch_table(table)
 
         assert isinstance(df, pd.DataFrame)
-        assert df.shape == (1, 2)
-        assert df.iloc[0].to_dict() == {"a": 1, "b": 2}
+        assert df.shape == TEST_DATAFRAME.shape
+        assert df.to_dict("list") == TEST_DATAFRAME_DICT
 
         mock_session.get.assert_called()
         mock_session.post.assert_called()
         assert table.payload.VIEWSTATE == "VS"
         assert table.payload.EVENTVALIDATION == "EV"
         assert table.payload.VIEWSTATEGENERATOR == "VG"
+
+
+def test_bts_simple_client_fetch_lookup():
+    lookup_table = Mock()
+    lookup_table.get_url.return_value = "http://example.com/lookup.csv"
+
+    get_resp = Mock()
+    get_resp.text = TEST_DATAFRAME_STRING
+    get_resp.raise_for_status = Mock()
+
+    with patch(
+        "btsdatapy._core.clients.requests.get", return_value=get_resp
+    ) as mock_get:
+        df = BtsSimpleClient.fetch_lookup(lookup_table)
+
+        assert isinstance(df, pd.DataFrame)
+        assert df.shape == TEST_DATAFRAME.shape
+        assert df.to_dict("list") == TEST_DATAFRAME_DICT
+
+        mock_get.assert_called_with(lookup_table.get_url())

@@ -5,7 +5,7 @@ import pandas as pd
 import requests
 from bs4 import BeautifulSoup
 from btsdatapy._core.constants import BASE_URL, USER_AGENT
-from btsdatapy._core.models import BtsTableRequest
+from btsdatapy._core.models import BtsTableRequest, LookupTable
 
 
 def _extract_aspnet_value(soup: BeautifulSoup, name: str) -> str:
@@ -57,3 +57,11 @@ class BtsAspNetClient:
             csv_content = z.read(z.namelist()[0]).decode("utf-8")
 
         return pd.read_csv(io.StringIO(csv_content))
+
+
+class BtsSimpleClient:
+    @staticmethod
+    def fetch_lookup(lookup: LookupTable) -> pd.DataFrame:
+        resp = requests.get(lookup.get_url())
+        resp.raise_for_status()
+        return pd.read_csv(io.StringIO(resp.text))
