@@ -53,8 +53,7 @@ class BtsAspNetClient:
         resp = self.session.post(url, headers=headers, data=payload)
         resp.raise_for_status()
 
-        z = zipfile.ZipFile(io.BytesIO(resp.content))
-        z.extractall("bts_data")
-        csv_content = z.read(z.namelist()[0]).decode("utf-8")
+        with zipfile.ZipFile(io.BytesIO(resp.content)) as z:
+            csv_content = z.read(z.namelist()[0]).decode("utf-8")
 
         return pd.read_csv(io.StringIO(csv_content))
