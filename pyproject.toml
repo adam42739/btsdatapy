@@ -42,5 +42,6 @@ config = ".pre-commit-config.yaml"
 
 [dependency-groups]
 dev = [
+    "pre-commit>=4.5.1",
     "pytest-cov>=7.0.0",
 ]

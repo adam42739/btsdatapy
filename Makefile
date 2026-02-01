@@ -1,5 +1,5 @@
 init: ## Initialize the development environment
-	uv install
+	uv sync
 
 build: ## Build the package
 	uv build
