@@ -1,5 +1,9 @@
 # btsdatapy
 
+## License
+
+MIT License - see [LICENSE](./LICENSE) file for details.
+
 ## Development
 
 This project uses [uv](https://docs.astral.sh/uv/), [ruff](https://docs.astral.sh/ruff/), [mypy](https://mypy.readthedocs.io/en/stable/), and [pytest](https://docs.pytest.org/en/stable/) for development.
@@ -7,7 +11,7 @@ This project uses [uv](https://docs.astral.sh/uv/), [ruff](https://docs.astral.s
 Common development commands have been implemented with make for convenience.
 
 ```bash
-make init # uv install
+make install # uv sync
 
 make build # uv build
 

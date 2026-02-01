@@ -1,11 +1,8 @@
-init: ## Initialize the development environment
-	uv sync
+install: ## Initialize the development environment
+	uv sync && uv run pre-commit install
 
 build: ## Build the package
-	uv build
-
-pre-commit-install: ## Install pre-commit hooks
-	uv run pre-commit install
+	uv build	
 
 pre-commit: ## Run pre-commit checks
 	uv run pre-commit run --all-files
