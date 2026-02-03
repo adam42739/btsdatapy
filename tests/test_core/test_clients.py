@@ -4,7 +4,7 @@ from unittest.mock import Mock, patch
 
 import pandas as pd
 from btsdatapy.core.clients import BtsStatefulClient, BtsStatelessClient
-from btsdatapy.core.models import BtsTableRequest, BtsTableRequestPayload
+from btsdatapy.core.models.requests import BtsTableRequest, BtsTableRequestPayload
 
 
 def _make_zip_bytes(csv_bytes: bytes) -> bytes:

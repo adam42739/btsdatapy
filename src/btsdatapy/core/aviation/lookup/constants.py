@@ -1,4 +1,4 @@
-from btsdatapy.core.models import BtsLookupRequest
+from btsdatapy.core.models.requests import BtsLookupRequest
 from btsdatapy.core.utils.obfuscation import rot13
 
 

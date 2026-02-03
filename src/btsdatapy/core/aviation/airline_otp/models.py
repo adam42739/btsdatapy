@@ -1,4 +1,4 @@
-from btsdatapy.core.models import BtsTableRequestPayload
+from btsdatapy.core.models.requests import BtsTableRequestPayload
 
 
 class ReportingCarrierOTPPayload(BtsTableRequestPayload):
