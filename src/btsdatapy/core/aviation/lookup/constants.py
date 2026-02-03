@@ -1,8 +1,8 @@
-from btsdatapy.core.models import LookupTable
+from btsdatapy.core.models import BtsLookupRequest
 from btsdatapy.core.utils.obfuscation import rot13
 
 
-class AviationLookup(LookupTable):
+class AviationLookup(BtsLookupRequest):
     UNIQUE_CARRIERS = rot13("L_unIquE_CArrIErs")
     AIRLINE_ID = rot13("L_AIrLInE_ID")
     CARRIER_HISTORY = rot13("L_CArrIEr_HIstory")

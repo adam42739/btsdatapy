@@ -3,13 +3,13 @@ from enum import Enum
 from typing import Any
 
 from btsdatapy.core.constants import (
+    ASP_DOWNLOAD_LOOKUP,
+    ASP_DOWNLOAD_TABLE,
+    ASP_LOOKUP_PARAM,
+    ASP_SH146_NAME_PARAM,
+    ASP_TABLE_ID_PARAM,
     BASE_URL,
     CONTENT_TYPE,
-    DOWNLOAD_ASPX,
-    DOWNLOAD_LOOKUP,
-    LOOKUP_PARAM,
-    SH146_NAME_PARAM,
-    TABLE_ID_PARAM,
     USER_AGENT,
 )
 from pydantic import BaseModel, Field
@@ -47,10 +47,11 @@ class BtsTableRequest:
     headers: BtsTableRequestHeaders = BtsTableRequestHeaders()
 
     def get_url(self) -> str:
-        aspx_params = (
-            f"{TABLE_ID_PARAM}={self.table_id}&{SH146_NAME_PARAM}={self.sh146_name}"
+        return (
+            f"{BASE_URL}{ASP_DOWNLOAD_TABLE}"
+            f"{ASP_TABLE_ID_PARAM}={self.table_id}&"
+            f"{ASP_SH146_NAME_PARAM}={self.sh146_name}"
         )
-        return f"{BASE_URL}{DOWNLOAD_ASPX}{aspx_params}"
 
     def get_payload(self) -> dict[str, Any]:
         return self.payload.model_dump(by_alias=True, exclude_none=True)
@@ -60,6 +61,6 @@ class BtsTableRequest:
         return self.headers.model_dump(by_alias=True)
 
 
-class LookupTable(Enum):
+class BtsLookupRequest(Enum):
     def get_url(self) -> str:
-        return f"{BASE_URL}{DOWNLOAD_LOOKUP}{LOOKUP_PARAM}={self.value}"
+        return f"{BASE_URL}{ASP_DOWNLOAD_LOOKUP}{ASP_LOOKUP_PARAM}={self.value}"

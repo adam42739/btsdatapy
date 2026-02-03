@@ -3,7 +3,7 @@ import zipfile
 from unittest.mock import Mock, patch
 
 import pandas as pd
-from btsdatapy.core.clients import BtsAspNetClient, BtsSimpleClient
+from btsdatapy.core.clients import BtsStatefulClient, BtsStatelessClient
 from btsdatapy.core.models import BtsTableRequest, BtsTableRequestPayload
 
 
@@ -30,7 +30,7 @@ TEST_TABLE_ID = "test-id"
 TEST_TABLE_NAME = "test-name"
 
 
-def test_bts_asp_net_client_fetch_table():
+def test_bts_stateful_client_fetch_table():
     get_resp = Mock()
     get_resp.text = TEST_HTML_WITH_ASP_NET_STATE
     get_resp.raise_for_status = Mock()
@@ -44,7 +44,7 @@ def test_bts_asp_net_client_fetch_table():
         mock_session.get.return_value = get_resp
         mock_session.post.return_value = post_resp
 
-        client = BtsAspNetClient(base_url="http://example.com")
+        client = BtsStatefulClient(base_url="http://example.com")
 
         table = BtsTableRequest(
             table_id=TEST_TABLE_ID,
@@ -64,7 +64,7 @@ def test_bts_asp_net_client_fetch_table():
         assert table.payload.VIEWSTATEGENERATOR == "VG"
 
 
-def test_bts_simple_client_fetch_lookup():
+def test_bts_stateless_client_fetch_lookup():
     lookup_table = Mock()
     lookup_table.get_url.return_value = "http://example.com/lookup.csv"
 
@@ -75,7 +75,7 @@ def test_bts_simple_client_fetch_lookup():
     with patch(
         "btsdatapy.core.clients.requests.get", return_value=get_resp
     ) as mock_get:
-        df = BtsSimpleClient.fetch_lookup(lookup_table)
+        df = BtsStatelessClient.fetch_lookup(lookup_table)
 
         assert isinstance(df, pd.DataFrame)
         assert df.shape == TEST_DATAFRAME.shape
