@@ -1,4 +1,4 @@
-from src.btsdatapy._core.utils.obfuscation import rot13
+from src.btsdatapy.core.utils.obfuscation import rot13
 
 
 def test_rot13():

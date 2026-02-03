@@ -2,7 +2,7 @@ from dataclasses import dataclass
 from enum import Enum
 from typing import Any
 
-from btsdatapy._core.constants import (
+from btsdatapy.core.constants import (
     BASE_URL,
     CONTENT_TYPE,
     DOWNLOAD_ASPX,

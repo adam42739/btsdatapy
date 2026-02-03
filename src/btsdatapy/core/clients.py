@@ -4,8 +4,8 @@ import zipfile
 import pandas as pd
 import requests
 from bs4 import BeautifulSoup
-from btsdatapy._core.constants import BASE_URL, USER_AGENT
-from btsdatapy._core.models import BtsTableRequest, LookupTable
+from btsdatapy.core.constants import BASE_URL, USER_AGENT
+from btsdatapy.core.models import BtsTableRequest, LookupTable
 
 
 def _extract_aspnet_value(soup: BeautifulSoup, name: str) -> str:

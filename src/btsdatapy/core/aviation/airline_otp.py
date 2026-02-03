@@ -1,5 +1,5 @@
-from btsdatapy._core.models import BtsTableRequestPayload
-from btsdatapy._core.utils.obfuscation import rot13
+from btsdatapy.core.models import BtsTableRequestPayload
+from btsdatapy.core.utils.obfuscation import rot13
 
 REPORTING_CARRIER_OTP_TABLE_ID: str = "FGJ"
 REPORTING_CARRIER_OTP_SH146_NAME: str = rot13("o0-time")

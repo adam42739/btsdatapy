@@ -3,8 +3,8 @@ import zipfile
 from unittest.mock import Mock, patch
 
 import pandas as pd
-from btsdatapy._core.clients import BtsAspNetClient, BtsSimpleClient
-from btsdatapy._core.models import BtsTableRequest, BtsTableRequestPayload
+from btsdatapy.core.clients import BtsAspNetClient, BtsSimpleClient
+from btsdatapy.core.models import BtsTableRequest, BtsTableRequestPayload
 
 
 def _make_zip_bytes(csv_bytes: bytes) -> bytes:
@@ -39,7 +39,7 @@ def test_bts_asp_net_client_fetch_table():
     post_resp.content = TEST_DATAFRAME_ZIP_BYTES
     post_resp.raise_for_status = Mock()
 
-    with patch("btsdatapy._core.clients.requests.Session") as MockSession:
+    with patch("btsdatapy.core.clients.requests.Session") as MockSession:
         mock_session = MockSession.return_value
         mock_session.get.return_value = get_resp
         mock_session.post.return_value = post_resp
@@ -73,7 +73,7 @@ def test_bts_simple_client_fetch_lookup():
     get_resp.raise_for_status = Mock()
 
     with patch(
-        "btsdatapy._core.clients.requests.get", return_value=get_resp
+        "btsdatapy.core.clients.requests.get", return_value=get_resp
     ) as mock_get:
         df = BtsSimpleClient.fetch_lookup(lookup_table)
 

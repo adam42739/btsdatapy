@@ -1,5 +1,5 @@
-from btsdatapy._core.models import LookupTable
-from btsdatapy._core.utils.obfuscation import rot13
+from btsdatapy.core.models import LookupTable
+from btsdatapy.core.utils.obfuscation import rot13
 
 
 class AviationLookup(LookupTable):
