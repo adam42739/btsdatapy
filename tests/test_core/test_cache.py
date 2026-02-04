@@ -1,5 +1,4 @@
-from pathlib import Path
-from unittest.mock import patch
+from tempfile import TemporaryDirectory
 
 import pandas as pd
 import pytest
@@ -22,48 +21,40 @@ TEST_DB = _Nameable("dbA")
 TEST_TABLE = _Nameable("tableA")
 TEST_LOOKUP = _Nameable("lookupA")
 
-_CREATED = set()
+
+def test_cache_toggle():
+    cache.set_cache_enabled(False)
+    assert cache.SETTINGS.cache_enabled is False
+
+    cache.set_cache_enabled(True)
+    assert cache.SETTINGS.cache_enabled is True
 
 
-def _mock_to_parquet(self, path, *args, **kwargs):
-    _CREATED.add(str(path))
+def test_cache_roundtrip_success():
+    with TemporaryDirectory() as temp_dir:
+        cache.set_cache_dir(temp_dir)
 
-
-def _mock_read_parquet(path, *args, **kwargs):
-    return TEST_DF
-
-
-def _mock_exists(self):
-    return str(self) in _CREATED
-
-
-def test_table_cache_roundtrip_success():
-    global _CREATED
-    _CREATED = set()
-
-    with (
-        patch("pandas.DataFrame.to_parquet", new=_mock_to_parquet),
-        patch("pandas.read_parquet", new=_mock_read_parquet),
-        patch.object(Path, "exists", new=_mock_exists),
-    ):
-        cache.set_cache(TEST_DF, TEST_LIB, database=TEST_DB, table=TEST_TABLE)
+        cache.write_cache(TEST_DF, TEST_LIB, database=TEST_DB, table=TEST_TABLE)
 
         assert cache.is_cached(TEST_LIB, database=TEST_DB, table=TEST_TABLE) is True
 
-        loaded = cache.get_cache(TEST_LIB, database=TEST_DB, table=TEST_TABLE)
+        loaded = cache.read_cache(TEST_LIB, database=TEST_DB, table=TEST_TABLE)
         assert loaded.to_dict("list") == TEST_DF_DICT
 
 
-def test_lookup_cache_roundtrip_failure():
-    global _CREATED
-    _CREATED = set()
+def test_cache_roundtrip_failure():
+    with TemporaryDirectory() as temp_dir:
+        cache.set_cache_dir(temp_dir)
 
-    with (
-        patch("pandas.DataFrame.to_parquet", new=_mock_to_parquet),
-        patch("pandas.read_parquet", new=_mock_read_parquet),
-        patch.object(Path, "exists", new=_mock_exists),
-    ):
-        cache.set_cache(TEST_DF, TEST_LIB, lookup=TEST_LOOKUP)
+        cache.write_cache(TEST_DF, TEST_LIB, lookup=TEST_LOOKUP)
 
         with pytest.raises(FileNotFoundError):
-            cache.get_cache(TEST_LIB, database=TEST_DB, table=TEST_TABLE)
+            cache.read_cache(TEST_LIB, database=TEST_DB, table=TEST_TABLE)
+
+
+def test_cache_invalid_params():
+    with TemporaryDirectory() as temp_dir:
+        cache.set_cache_dir(temp_dir)
+
+        with pytest.raises(ValueError):
+            cache.write_cache(TEST_DF, TEST_LIB)

@@ -10,8 +10,8 @@ from btsdatapy.core.models.templates import (
 )
 
 
-def set_cache_dir(cache_dir: str):
-    SETTINGS.cache_dir = cache_dir
+def set_cache_dir(cache_dir: str | Path):
+    SETTINGS.cache_dir = Path(cache_dir)
 
 
 def set_cache_enabled(enabled: bool):
@@ -48,7 +48,7 @@ def is_cached(
     return path.exists()
 
 
-def get_cache(
+def read_cache(
     data_library: BtsDataLibrary,
     database: BtsDatabase = None,
     table: BtsTable = None,
@@ -62,7 +62,7 @@ def get_cache(
     return pd.read_parquet(path)
 
 
-def set_cache(
+def write_cache(
     df: pd.DataFrame,
     data_library: BtsDataLibrary,
     database: BtsDatabase = None,
