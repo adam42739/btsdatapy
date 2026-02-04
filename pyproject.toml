@@ -17,6 +17,7 @@ dependencies = [
     "beautifulsoup4>=4.12",
     "pandas>=2.0",
     "pydantic>=2.12.5",
+    "pyarrow>=23.0.0",
 ]
 
 [project.urls]

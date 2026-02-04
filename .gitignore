@@ -1,5 +1,6 @@
 # Environment
 .venv
+local/
 
 # Distribution
 .python-version 
