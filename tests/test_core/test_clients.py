@@ -46,12 +46,12 @@ def test_bts_stateful_client_fetch_table():
 
         client = BtsStatefulClient(base_url="http://example.com")
 
-        table = BtsTableRequest(
+        table_request = BtsTableRequest(
             table_id=TEST_TABLE_ID,
             sh146_name=TEST_TABLE_NAME,
             payload=BtsTableRequestPayload(),
         )
-        df = client.fetch_table(table)
+        df = client.fetch_table(table_request)
 
         assert isinstance(df, pd.DataFrame)
         assert df.shape == TEST_DATAFRAME.shape
@@ -59,14 +59,14 @@ def test_bts_stateful_client_fetch_table():
 
         mock_session.get.assert_called()
         mock_session.post.assert_called()
-        assert table.payload.VIEWSTATE == "VS"
-        assert table.payload.EVENTVALIDATION == "EV"
-        assert table.payload.VIEWSTATEGENERATOR == "VG"
+        assert table_request.payload.VIEWSTATE == "VS"
+        assert table_request.payload.EVENTVALIDATION == "EV"
+        assert table_request.payload.VIEWSTATEGENERATOR == "VG"
 
 
 def test_bts_stateless_client_fetch_lookup():
-    lookup_table = Mock()
-    lookup_table.get_url.return_value = "http://example.com/lookup.csv"
+    lookup_request = Mock()
+    lookup_request.get_url.return_value = "http://example.com/lookup.csv"
 
     get_resp = Mock()
     get_resp.text = TEST_DATAFRAME_STRING
@@ -75,10 +75,10 @@ def test_bts_stateless_client_fetch_lookup():
     with patch(
         "btsdatapy.core.clients.requests.get", return_value=get_resp
     ) as mock_get:
-        df = BtsStatelessClient.fetch_lookup(lookup_table)
+        df = BtsStatelessClient.fetch_lookup(lookup_request)
 
         assert isinstance(df, pd.DataFrame)
         assert df.shape == TEST_DATAFRAME.shape
         assert df.to_dict("list") == TEST_DATAFRAME_DICT
 
-        mock_get.assert_called_with(lookup_table.get_url())
+        mock_get.assert_called_with(lookup_request.get_url())
