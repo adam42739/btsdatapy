@@ -11,11 +11,9 @@ This project uses [uv](https://docs.astral.sh/uv/), [ruff](https://docs.astral.s
 Common development commands have been implemented with make for convenience.
 
 ```bash
-make install # uv sync
+make install # uv sync && uv run pre-commit install
 
 make build # uv build
-
-make pre-commit-install # uv run pre-commit install
 
 make pre-commit # uv run pre-commit run --all-files
 
