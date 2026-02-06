@@ -1,0 +1,32 @@
+[
+  {
+    "type": "fetch",
+    "name": "delay_groups",
+    "lookup_id": "L_ontIME_DELAy_Groups",
+    "rot13": true
+  },
+  {
+    "type": "fetch",
+    "name": "departure_time_block",
+    "lookup_id": "L_DEpArrBLK",
+    "rot13": true
+  },
+  {
+    "type": "fetch",
+    "name": "cancelation_codes",
+    "lookup_id": "L_CAnCELLAtIon",
+    "rot13": true
+  },
+  {
+    "type": "fetch",
+    "name": "distance_group",
+    "lookup_id": "L_DIstAnCE_Group_SVQ",
+    "rot13": true
+  },
+  {
+    "type": "fetch",
+    "name": "diverted_landings",
+    "lookup_id": "L_DIvErsIons",
+    "rot13": true
+  }
+]

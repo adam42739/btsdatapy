@@ -42,7 +42,7 @@ class BtsStatefulClient:
         self.viewstategenerator = _extract_aspnet_value(soup, "__VIEWSTATEGENERATOR")
 
     def fetch_table(self, table: BtsTableRequest) -> pd.DataFrame:
-        table.payload.set_aspnet_state(
+        table.set_asp_state(
             self.viewstate, self.eventvalidation, self.viewstategenerator
         )
 

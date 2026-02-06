@@ -1,3 +1,5 @@
+from pathlib import Path
+
 from btsdatapy.core.utils.obfuscation import rot13
 
 BASE_URL = "https://www.transtats.bts.gov/"
@@ -11,3 +13,6 @@ ASP_LOOKUP_PARAM = rot13("L11k72")
 
 USER_AGENT = "Mozilla/5.0"
 CONTENT_TYPE = "application/x-www-form-urlencoded"
+
+TABLES_CONFIGS_PATH = Path(__file__).parent / "tables"
+LOOKUPS_CONFIGS_PATH = Path(__file__).parent / "lookups"

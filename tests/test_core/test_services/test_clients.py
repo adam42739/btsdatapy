@@ -3,8 +3,9 @@ import zipfile
 from unittest.mock import Mock, patch
 
 import pandas as pd
-from btsdatapy.core.clients import BtsStatefulClient, BtsStatelessClient
-from btsdatapy.core.models.requests import BtsTableRequest, BtsTableRequestPayload
+from btsdatapy.core.config import TABLE_CONFIGS
+from btsdatapy.core.models.requests import BtsTableRequest
+from btsdatapy.core.services.clients import BtsStatefulClient, BtsStatelessClient
 
 
 def _make_zip_bytes(csv_bytes: bytes) -> bytes:
@@ -26,8 +27,7 @@ TEST_DATAFRAME_STRING = TEST_DATAFRAME.to_csv(index=False)
 TEST_DATAFRAME_BYTES = TEST_DATAFRAME_STRING.encode("utf-8")
 TEST_DATAFRAME_ZIP_BYTES = _make_zip_bytes(TEST_DATAFRAME_BYTES)
 
-TEST_TABLE_ID = "test-id"
-TEST_TABLE_NAME = "test-name"
+TEST_COLUMNS = ["col1", "col2"]
 
 
 def test_bts_stateful_client_fetch_table():
@@ -39,7 +39,7 @@ def test_bts_stateful_client_fetch_table():
     post_resp.content = TEST_DATAFRAME_ZIP_BYTES
     post_resp.raise_for_status = Mock()
 
-    with patch("btsdatapy.core.clients.requests.Session") as MockSession:
+    with patch("btsdatapy.core.services.clients.requests.Session") as MockSession:
         mock_session = MockSession.return_value
         mock_session.get.return_value = get_resp
         mock_session.post.return_value = post_resp
@@ -47,9 +47,10 @@ def test_bts_stateful_client_fetch_table():
         client = BtsStatefulClient(base_url="http://example.com")
 
         table_request = BtsTableRequest(
-            table_id=TEST_TABLE_ID,
-            sh146_name=TEST_TABLE_NAME,
-            payload=BtsTableRequestPayload(),
+            table_config=TABLE_CONFIGS["aviation"]["airline_otp"][
+                "reporting_carrier_otp"
+            ],
+            columns=TEST_COLUMNS,
         )
         df = client.fetch_table(table_request)
 
@@ -59,9 +60,9 @@ def test_bts_stateful_client_fetch_table():
 
         mock_session.get.assert_called()
         mock_session.post.assert_called()
-        assert table_request.payload.VIEWSTATE == "VS"
-        assert table_request.payload.EVENTVALIDATION == "EV"
-        assert table_request.payload.VIEWSTATEGENERATOR == "VG"
+        assert table_request._viewstate == "VS"
+        assert table_request._eventvalidation == "EV"
+        assert table_request._viewstategenerator == "VG"
 
 
 def test_bts_stateless_client_fetch_lookup():
@@ -73,7 +74,7 @@ def test_bts_stateless_client_fetch_lookup():
     get_resp.raise_for_status = Mock()
 
     with patch(
-        "btsdatapy.core.clients.requests.get", return_value=get_resp
+        "btsdatapy.core.services.clients.requests.get", return_value=get_resp
     ) as mock_get:
         df = BtsStatelessClient.fetch_lookup(lookup_request)
 

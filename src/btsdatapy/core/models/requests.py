@@ -1,6 +1,3 @@
-from dataclasses import dataclass
-from enum import Enum
-from typing import Any
 
 from btsdatapy.core.constants import (
     ASP_DOWNLOAD_LOOKUP,
@@ -12,55 +9,90 @@ from btsdatapy.core.constants import (
     CONTENT_TYPE,
     USER_AGENT,
 )
-from pydantic import BaseModel, Field
+from btsdatapy.core.models.config import BtsTableConfig
+from btsdatapy.core.utils.obfuscation import rot13
 
 
-class BtsTableRequestPayload(BaseModel):
-    EVENTTARGET: str = Field("", alias="__EVENTTARGET")
-    EVENTARGUMENT: str = Field("", alias="__EVENTARGUMENT")
-    LASTFOCUS: str = Field("", alias="__LASTFOCUS")
-    VIEWSTATE: str = Field("", alias="__VIEWSTATE")
-    VIEWSTATEGENERATOR: str = Field("", alias="__VIEWSTATEGENERATOR")
-    EVENTVALIDATION: str = Field("", alias="__EVENTVALIDATION")
+class BtsTableRequest:
+    def __init__(
+        self,
+        table_config: BtsTableConfig,
+        columns: list[str],
+    ):
+        self._eventtarget: str = ""
+        self._eventargument: str = ""
+        self._lastfocus: str = ""
+        self._viewstate: str = ""
+        self._viewstategenerator: str = ""
+        self._eventvalidation: str = ""
 
-    def set_aspnet_state(
+        self.user_parameters: dict[str, str] = {}
+
+        self.table_config = table_config
+        self.columns = columns
+
+    def set_asp_state(
         self, viewstate: str, eventvalidation: str, viewstategenerator: str
     ):
-        self.VIEWSTATE = viewstate
-        self.EVENTVALIDATION = eventvalidation
-        self.VIEWSTATEGENERATOR = viewstategenerator
+        self._viewstate = viewstate
+        self._eventvalidation = eventvalidation
+        self._viewstategenerator = viewstategenerator
 
-
-class BtsTableRequestHeaders(BaseModel):
-    User_Agent: str = Field(USER_AGENT, alias="User-Agent")
-    Content_Type: str = Field(CONTENT_TYPE, alias="Content-Type")
-    Referer: str = ""
-    Origin: str = BASE_URL
-
-
-@dataclass
-class BtsTableRequest:
-    table_id: str
-    sh146_name: str
-
-    payload: BtsTableRequestPayload
-    headers: BtsTableRequestHeaders = BtsTableRequestHeaders()
+    def set_user_parameters(self, user_parameters: dict[str, str]):
+        self.user_parameters = user_parameters
 
     def get_url(self) -> str:
+        table_id = (
+            self.table_config.table_id.value
+            if not self.table_config.table_id.rot13
+            else rot13(self.table_config.table_id.value)
+        )
+        sh146_name = (
+            self.table_config.table_sh146_name.value
+            if not self.table_config.table_sh146_name.rot13
+            else rot13(self.table_config.table_sh146_name.value)
+        )
         return (
             f"{BASE_URL}{ASP_DOWNLOAD_TABLE}"
-            f"{ASP_TABLE_ID_PARAM}={self.table_id}&"
-            f"{ASP_SH146_NAME_PARAM}={self.sh146_name}"
+            f"{ASP_TABLE_ID_PARAM}={table_id}&"
+            f"{ASP_SH146_NAME_PARAM}={sh146_name}"
         )
 
-    def get_payload(self) -> dict[str, Any]:
-        return self.payload.model_dump(by_alias=True, exclude_none=True)
+    def get_headers(self) -> dict[str, str]:
+        return {
+            "User-Agent": USER_AGENT,
+            "Content-Type": CONTENT_TYPE,
+            "Referer": self.get_url(),
+            "Origin": BASE_URL,
+        }
 
-    def get_headers(self) -> dict[str, Any]:
-        self.headers.Referer = self.get_url()
-        return self.headers.model_dump(by_alias=True)
+    def get_payload(self) -> dict[str, str]:
+        payload = {
+            "__EVENTTARGET": self._eventtarget,
+            "__EVENTARGUMENT": self._eventargument,
+            "__LASTFOCUS": self._lastfocus,
+            "__VIEWSTATE": self._viewstate,
+            "__VIEWSTATEGENERATOR": self._viewstategenerator,
+            "__EVENTVALIDATION": self._eventvalidation,
+        }
+
+        for fixed_param in self.table_config.fixed_parameters:
+            payload[fixed_param.name] = fixed_param.value
+
+        for param, value in self.user_parameters.items():
+            payload[param] = value
+
+        for column in self.table_config.columns:
+            if column.name in self.columns:
+                payload[column.payload_name] = "on"
+
+        return payload
 
 
-class BtsLookupRequest(Enum):
+class BtsLookupRequest:
+    def __init__(self, value: str, rot13: bool):
+        self.value = value
+        self.rot13 = rot13
+
     def get_url(self) -> str:
         return f"{BASE_URL}{ASP_DOWNLOAD_LOOKUP}{ASP_LOOKUP_PARAM}={self.value}"
