@@ -12,11 +12,19 @@ def set_cache_enabled(enabled: bool):
     SETTINGS.cache_enabled = enabled
 
 
+def _serialize_user_parameters(user_parameters: dict[str, str]) -> str:
+    stringified_params = sorted([f"{k}={v}" for k, v in user_parameters.items()])
+
+    return "_".join(stringified_params)
+
+
 def _get_path(
-    path_id: str,
+    user_parameters: dict[str, str],
     table_id: str | None = None,
     lookup_id: str | None = None,
 ) -> Path:
+    path_id = _serialize_user_parameters(user_parameters)
+
     if table_id and not lookup_id:
         path = SETTINGS.cache_dir / "tables" / table_id / path_id
     elif lookup_id and not table_id:
@@ -31,34 +39,34 @@ def _get_path(
 
 
 def is_cached(
-    path_id: str,
+    user_parameters: dict[str, str],
     table_id: str | None = None,
     lookup_id: str | None = None,
 ) -> bool:
-    path = _get_path(path_id, table_id, lookup_id)
+    path = _get_path(user_parameters, table_id, lookup_id)
     return path.exists()
 
 
 def read_cache(
-    path_id: str,
+    user_parameters: dict[str, str],
     table_id: str | None = None,
     lookup_id: str | None = None,
 ) -> pd.DataFrame:
-    if not is_cached(path_id, table_id, lookup_id):
+    if not is_cached(user_parameters, table_id, lookup_id):
         raise FileNotFoundError("Requested cache file does not exist.")
 
-    path = _get_path(path_id, table_id, lookup_id)
+    path = _get_path(user_parameters, table_id, lookup_id)
 
     return pd.read_parquet(path)
 
 
 def write_cache(
     df: pd.DataFrame,
-    path_id: str,
+    user_parameters: dict[str, str],
     table_id: str | None = None,
     lookup_id: str | None = None,
 ):
-    path = _get_path(path_id, table_id, lookup_id)
+    path = _get_path(user_parameters, table_id, lookup_id)
     path.parent.mkdir(parents=True, exist_ok=True)
 
     df.to_parquet(path)
