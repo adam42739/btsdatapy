@@ -2,7 +2,7 @@ def iterate_year_months(
     start: tuple[int, int],
     end: tuple[int, int],
     year_key: str = "cboYear",
-    month_key: str = "cboMonth",
+    month_key: str = "cboPeriod",
 ) -> list[dict[str, str]]:
     start_year, start_month = start
     end_year, end_month = end

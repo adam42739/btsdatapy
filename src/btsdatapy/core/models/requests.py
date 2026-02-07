@@ -1,16 +1,11 @@
-
 from btsdatapy.core.constants import (
     ASP_DOWNLOAD_LOOKUP,
-    ASP_DOWNLOAD_TABLE,
     ASP_LOOKUP_PARAM,
-    ASP_SH146_NAME_PARAM,
-    ASP_TABLE_ID_PARAM,
     BASE_URL,
     CONTENT_TYPE,
     USER_AGENT,
 )
 from btsdatapy.core.models.config import BtsTableConfig
-from btsdatapy.core.utils.obfuscation import rot13
 
 
 class BtsTableRequest:
@@ -18,6 +13,7 @@ class BtsTableRequest:
         self,
         table_config: BtsTableConfig,
         columns: list[str],
+        user_parameters: dict[str, str],
     ):
         self._eventtarget: str = ""
         self._eventargument: str = ""
@@ -26,10 +22,9 @@ class BtsTableRequest:
         self._viewstategenerator: str = ""
         self._eventvalidation: str = ""
 
-        self.user_parameters: dict[str, str] = {}
-
         self.table_config = table_config
-        self.columns = columns
+        self.user_parameters = user_parameters
+        self.columns = list(set(columns) | set(table_config.primary_key))
 
     def set_asp_state(
         self, viewstate: str, eventvalidation: str, viewstategenerator: str
@@ -38,25 +33,8 @@ class BtsTableRequest:
         self._eventvalidation = eventvalidation
         self._viewstategenerator = viewstategenerator
 
-    def set_user_parameters(self, user_parameters: dict[str, str]):
-        self.user_parameters = user_parameters
-
     def get_url(self) -> str:
-        table_id = (
-            self.table_config.table_id.value
-            if not self.table_config.table_id.rot13
-            else rot13(self.table_config.table_id.value)
-        )
-        sh146_name = (
-            self.table_config.table_sh146_name.value
-            if not self.table_config.table_sh146_name.rot13
-            else rot13(self.table_config.table_sh146_name.value)
-        )
-        return (
-            f"{BASE_URL}{ASP_DOWNLOAD_TABLE}"
-            f"{ASP_TABLE_ID_PARAM}={table_id}&"
-            f"{ASP_SH146_NAME_PARAM}={sh146_name}"
-        )
+        return self.table_config.get_url()
 
     def get_headers(self) -> dict[str, str]:
         return {

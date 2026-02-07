@@ -28,6 +28,9 @@ TEST_DATAFRAME_BYTES = TEST_DATAFRAME_STRING.encode("utf-8")
 TEST_DATAFRAME_ZIP_BYTES = _make_zip_bytes(TEST_DATAFRAME_BYTES)
 
 TEST_COLUMNS = ["col1", "col2"]
+TEST_USER_PARAMETERS = {"param1": "value1"}
+
+TEST_TABLE_CONFIG = TABLE_CONFIGS["aviation"]["airline_otp"]["reporting_carrier_otp"]
 
 
 def test_bts_stateful_client_fetch_table():
@@ -47,10 +50,9 @@ def test_bts_stateful_client_fetch_table():
         client = BtsStatefulClient(base_url="http://example.com")
 
         table_request = BtsTableRequest(
-            table_config=TABLE_CONFIGS["aviation"]["airline_otp"][
-                "reporting_carrier_otp"
-            ],
+            table_config=TEST_TABLE_CONFIG,
             columns=TEST_COLUMNS,
+            user_parameters=TEST_USER_PARAMETERS,
         )
         df = client.fetch_table(table_request)
 

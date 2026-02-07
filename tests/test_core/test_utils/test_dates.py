@@ -6,22 +6,22 @@ def test_iterate_year_months():
     end = (2024, 6)
 
     expected = [
-        {"cboYear": "2023", "cboMonth": "3"},
-        {"cboYear": "2023", "cboMonth": "4"},
-        {"cboYear": "2023", "cboMonth": "5"},
-        {"cboYear": "2023", "cboMonth": "6"},
-        {"cboYear": "2023", "cboMonth": "7"},
-        {"cboYear": "2023", "cboMonth": "8"},
-        {"cboYear": "2023", "cboMonth": "9"},
-        {"cboYear": "2023", "cboMonth": "10"},
-        {"cboYear": "2023", "cboMonth": "11"},
-        {"cboYear": "2023", "cboMonth": "12"},
-        {"cboYear": "2024", "cboMonth": "1"},
-        {"cboYear": "2024", "cboMonth": "2"},
-        {"cboYear": "2024", "cboMonth": "3"},
-        {"cboYear": "2024", "cboMonth": "4"},
-        {"cboYear": "2024", "cboMonth": "5"},
-        {"cboYear": "2024", "cboMonth": "6"},
+        {"cboYear": "2023", "cboPeriod": "3"},
+        {"cboYear": "2023", "cboPeriod": "4"},
+        {"cboYear": "2023", "cboPeriod": "5"},
+        {"cboYear": "2023", "cboPeriod": "6"},
+        {"cboYear": "2023", "cboPeriod": "7"},
+        {"cboYear": "2023", "cboPeriod": "8"},
+        {"cboYear": "2023", "cboPeriod": "9"},
+        {"cboYear": "2023", "cboPeriod": "10"},
+        {"cboYear": "2023", "cboPeriod": "11"},
+        {"cboYear": "2023", "cboPeriod": "12"},
+        {"cboYear": "2024", "cboPeriod": "1"},
+        {"cboYear": "2024", "cboPeriod": "2"},
+        {"cboYear": "2024", "cboPeriod": "3"},
+        {"cboYear": "2024", "cboPeriod": "4"},
+        {"cboYear": "2024", "cboPeriod": "5"},
+        {"cboYear": "2024", "cboPeriod": "6"},
     ]
     result = list(iterate_year_months(start, end))
 

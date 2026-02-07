@@ -31,6 +31,7 @@
       "type": "numberic_month"
     }
   ],
+  "primary_key": ["FlightDate", "TailNumber", "ActualDepartureTime"],
   "columns": [
     {
       "name": "Year",

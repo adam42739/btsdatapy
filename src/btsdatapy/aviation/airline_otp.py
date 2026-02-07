@@ -1,20 +1,19 @@
 import pandas as pd
 from btsdatapy.core.config import TABLE_CONFIGS
-from btsdatapy.core.models.requests import BtsTableRequest
 from btsdatapy.core.services.fetch import fetch_table
 from btsdatapy.core.utils.dates import iterate_year_months
 
 _REPORTING_CARRIER_OTP_DEFAULT_COLUMNS = [
     "FlightDate",
-    "Reporting_Airline",
-    "Tail_Number",
-    "Flight_Number_Reporting_Airline",
-    "Origin",
-    "Dest",
-    "CRSDepTime",
-    "DepTime",
-    "CRSArrTime",
-    "ArrTime",
+    "ReportingAirline",
+    "TailNumber",
+    "ReportingAirlineFlightNumber",
+    "OriginAirport",
+    "DestinationAirport",
+    "ScheduledDepartureTime",
+    "ActualDepartureTime",
+    "ScheduledArrivalTime",
+    "ActualArrivalTime",
     "Cancelled",
 ]
 
@@ -95,15 +94,11 @@ def reporting_carrier_otp(
     Fetch data for April, 2023. Specify an explicit set of columns:
 
     >>> df = reporting_carrier_otp((2023, 4), only=["FlightDate", "Carrier", "ArrivalDelay"])
-    """ # noqa: E501
+    """  # noqa: E501
     table_config = TABLE_CONFIGS["aviation"]["airline_otp"]["reporting_carrier_otp"]
+    columns = _REPORTING_CARRIER_OTP_DEFAULT_COLUMNS
+    all_user_parameters = iterate_year_months(start, end or start)
 
-    table_request = BtsTableRequest(
-        table_config=table_config,
-        columns=_REPORTING_CARRIER_OTP_DEFAULT_COLUMNS,
-    )
-    user_parameters = iterate_year_months(start, end or start)
-
-    df = fetch_table(table_request, user_parameters)
+    df = fetch_table(table_config, columns, all_user_parameters)
 
     return df

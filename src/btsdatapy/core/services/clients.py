@@ -41,14 +41,14 @@ class BtsStatefulClient:
         self.eventvalidation = _extract_aspnet_value(soup, "__EVENTVALIDATION")
         self.viewstategenerator = _extract_aspnet_value(soup, "__VIEWSTATEGENERATOR")
 
-    def fetch_table(self, table: BtsTableRequest) -> pd.DataFrame:
-        table.set_asp_state(
+    def fetch_table(self, table_request: BtsTableRequest) -> pd.DataFrame:
+        table_request.set_asp_state(
             self.viewstate, self.eventvalidation, self.viewstategenerator
         )
 
-        url = table.get_url()
-        payload = table.get_payload()
-        headers = table.get_headers()
+        url = table_request.get_url()
+        payload = table_request.get_payload()
+        headers = table_request.get_headers()
 
         resp = self.session.post(url, headers=headers, data=payload)
         resp.raise_for_status()
@@ -56,7 +56,10 @@ class BtsStatefulClient:
         with zipfile.ZipFile(io.BytesIO(resp.content)) as z:
             csv_content = z.read(z.namelist()[0]).decode("utf-8")
 
-        return pd.read_csv(io.StringIO(csv_content))
+        df = pd.read_csv(io.StringIO(csv_content), dtype=str)
+        df = df.rename(columns=table_request.table_config.get_column_name_mapping())
+
+        return df
 
 
 class BtsStatelessClient:
