@@ -31,6 +31,7 @@
       "type": "numberic_month"
     }
   ],
+  "primary_key": ["FlightDate", "TailNumber", "ActualDepartureTime"],
   "columns": [
     {
       "name": "Year",
@@ -49,7 +50,7 @@
       "payload_name": "MONTH",
       "response_name": "MONTH",
       "has_lookup": true,
-      "lookup": "months"
+      "lookup": "l_months"
     },
     {
       "name": "DayofMonth",
@@ -62,7 +63,7 @@
       "payload_name": "DAY_OF_WEEK",
       "response_name": "DAY_OF_WEEK",
       "has_lookup": true,
-      "lookup": "day_of_week"
+      "lookup": "l_day_of_week"
     },
     {
       "name": "FlightDate",
@@ -75,21 +76,21 @@
       "payload_name": "OP_UNIQUE_CARRIER",
       "response_name": "OP_UNIQUE_CARRIER",
       "has_lookup": true,
-      "lookup": "aviation.unique_carriers"
+      "lookup": "aviation.l_unique_carriers"
     },
     {
       "name": "DOT_ID_ReportingAirline",
       "payload_name": "OP_CARRIER_AIRLINE_ID",
       "response_name": "OP_CARRIER_AIRLINE_ID",
       "has_lookup": true,
-      "lookup": "aviation.airline_id"
+      "lookup": "aviation.l_airline_id"
     },
     {
       "name": "IATA_CODE_ReportingAirline",
       "payload_name": "OP_CARRIER",
       "response_name": "OP_CARRIER",
       "has_lookup": true,
-      "lookup": "aviation.carrier_history"
+      "lookup": "aviation.l_carrier_history"
     },
     {
       "name": "TailNumber",
@@ -108,28 +109,28 @@
       "payload_name": "ORIGIN_AIRPORT_ID",
       "response_name": "ORIGIN_AIRPORT_ID",
       "has_lookup": true,
-      "lookup": "aviation.airport_id"
+      "lookup": "aviation.l_airport_id"
     },
     {
       "name": "OriginAirportSeqID",
       "payload_name": "ORIGIN_AIRPORT_SEQ_ID",
       "response_name": "ORIGIN_AIRPORT_SEQ_ID",
       "has_lookup": true,
-      "lookup": "aviation.airport_seq_id"
+      "lookup": "aviation.l_airport_seq_id"
     },
     {
       "name": "OriginCityMarketID",
       "payload_name": "ORIGIN_CITY_MARKET_ID",
       "response_name": "ORIGIN_CITY_MARKET_ID",
       "has_lookup": true,
-      "lookup": "aviation.city_market_id"
+      "lookup": "aviation.l_city_market_id"
     },
     {
       "name": "OriginAirport",
       "payload_name": "ORIGIN",
       "response_name": "ORIGIN",
       "has_lookup": true,
-      "lookup": "aviation.airport"
+      "lookup": "aviation.l_airport"
     },
     {
       "name": "OriginCityName",
@@ -142,14 +143,14 @@
       "payload_name": "ORIGIN_STATE_ABR",
       "response_name": "ORIGIN_STATE_ABR",
       "has_lookup": true,
-      "lookup": "aviation.airport_state_abr"
+      "lookup": "aviation.l_airport_state_abr"
     },
     {
       "name": "OriginStateFips",
       "payload_name": "ORIGIN_STATE_FIPS",
       "response_name": "ORIGIN_STATE_FIPS",
       "has_lookup": true,
-      "lookup": "aviation.state_fips"
+      "lookup": "aviation.l_state_fips"
     },
     {
       "name": "OriginStateName",
@@ -162,35 +163,35 @@
       "payload_name": "ORIGIN_WAC",
       "response_name": "ORIGIN_WAC",
       "has_lookup": true,
-      "lookup": "aviation.world_area_code"
+      "lookup": "aviation.l_world_area_code"
     },
     {
       "name": "DestinationAirportID",
       "payload_name": "DEST_AIRPORT_ID",
       "response_name": "DEST_AIRPORT_ID",
       "has_lookup": true,
-      "lookup": "aviation.airport_id"
+      "lookup": "aviation.l_airport_id"
     },
     {
       "name": "DestinationAirportSeqID",
       "payload_name": "DEST_AIRPORT_SEQ_ID",
       "response_name": "DEST_AIRPORT_SEQ_ID",
       "has_lookup": true,
-      "lookup": "aviation.airport_seq_id"
+      "lookup": "aviation.l_airport_seq_id"
     },
     {
       "name": "DestinationCityMarketID",
       "payload_name": "DEST_CITY_MARKET_ID",
       "response_name": "DEST_CITY_MARKET_ID",
       "has_lookup": true,
-      "lookup": "aviation.city_market_id"
+      "lookup": "aviation.l_city_market_id"
     },
     {
       "name": "DestinationAirport",
       "payload_name": "DEST",
       "response_name": "DEST",
       "has_lookup": true,
-      "lookup": "aviation.airport"
+      "lookup": "aviation.l_airport"
     },
     {
       "name": "DestinationCityName",
@@ -203,14 +204,14 @@
       "payload_name": "DEST_STATE_ABR",
       "response_name": "DEST_STATE_ABR",
       "has_lookup": true,
-      "lookup": "aviation.airport_state_abr"
+      "lookup": "aviation.l_airport_state_abr"
     },
     {
       "name": "DestinationStateFips",
       "payload_name": "DEST_STATE_FIPS",
       "response_name": "DEST_STATE_FIPS",
       "has_lookup": true,
-      "lookup": "aviation.state_fips"
+      "lookup": "aviation.l_state_fips"
     },
     {
       "name": "DestinationStateName",
@@ -223,7 +224,7 @@
       "payload_name": "DEST_WAC",
       "response_name": "DEST_WAC",
       "has_lookup": true,
-      "lookup": "aviation.world_area_code"
+      "lookup": "aviation.l_world_area_code"
     },
     {
       "name": "ScheduledDepartureTime",
@@ -260,14 +261,14 @@
       "payload_name": "DEP_DELAY_GROUP",
       "response_name": "DEP_DELAY_GROUP",
       "has_lookup": true,
-      "lookup": "aviation.airline_otp.delay_groups"
+      "lookup": "aviation.airline_otp.l_delay_groups"
     },
     {
       "name": "DepartureTimeBlock",
       "payload_name": "DEP_TIME_BLK",
       "response_name": "DEP_TIME_BLK",
       "has_lookup": true,
-      "lookup": "aviation.airline_otp.departure_time_block"
+      "lookup": "aviation.airline_otp.l_departure_time_block"
     },
     {
       "name": "TaxiOut",
@@ -328,14 +329,14 @@
       "payload_name": "ARR_DELAY_GROUP",
       "response_name": "ARR_DELAY_GROUP",
       "has_lookup": true,
-      "lookup": "aviation.airline_otp.delay_groups"
+      "lookup": "aviation.airline_otp.l_delay_groups"
     },
     {
       "name": "ArrivalTimeBlock",
       "payload_name": "ARR_TIME_BLK",
       "response_name": "ARR_TIME_BLK",
       "has_lookup": true,
-      "lookup": "aviation.airline_otp.departure_time_block"
+      "lookup": "aviation.airline_otp.l_departure_time_block"
     },
     {
       "name": "Cancelled",
@@ -348,7 +349,7 @@
       "payload_name": "CANCELLATION_CODE",
       "response_name": "CANCELLATION_CODE",
       "has_lookup": true,
-      "lookup": "aviation.airline_otp.cancelation_codes"
+      "lookup": "aviation.airline_otp.l_cancelation_codes"
     },
     {
       "name": "Diverted",
@@ -391,7 +392,7 @@
       "payload_name": "DISTANCE_GROUP",
       "response_name": "DISTANCE_GROUP",
       "has_lookup": true,
-      "lookup": "aviation.airline_otp.distance_group"
+      "lookup": "aviation.airline_otp.l_distance_group"
     },
     {
       "name": "CarrierDelay",
@@ -446,7 +447,7 @@
       "payload_name": "DIV_AIRPORT_LANDINGS",
       "response_name": "DIV_AIRPORT_LANDINGS",
       "has_lookup": true,
-      "lookup": "aviation.airline_otp.diverted_landings"
+      "lookup": "aviation.airline_otp.l_diverted_landings"
     },
     {
       "name": "DivertedReachedDestination",
@@ -483,14 +484,14 @@
       "payload_name": "DIV1_AIRPORT_ID",
       "response_name": "DIV1_AIRPORT_ID",
       "has_lookup": true,
-      "lookup": "aviation.airport_id"
+      "lookup": "aviation.l_airport_id"
     },
     {
       "name": "Diverted1AirportSeqID",
       "payload_name": "DIV1_AIRPORT_SEQ_ID",
       "response_name": "DIV1_AIRPORT_SEQ_ID",
       "has_lookup": true,
-      "lookup": "aviation.airport_seq_id"
+      "lookup": "aviation.l_airport_seq_id"
     },
     {
       "name": "Diverted1WheelsOn",
@@ -533,14 +534,14 @@
       "payload_name": "DIV2_AIRPORT_ID",
       "response_name": "DIV2_AIRPORT_ID",
       "has_lookup": true,
-      "lookup": "aviation.airport_id"
+      "lookup": "aviation.l_airport_id"
     },
     {
       "name": "Diverted2AirportSeqID",
       "payload_name": "DIV2_AIRPORT_SEQ_ID",
       "response_name": "DIV2_AIRPORT_SEQ_ID",
       "has_lookup": true,
-      "lookup": "aviation.airport_seq_id"
+      "lookup": "aviation.l_airport_seq_id"
     },
     {
       "name": "Diverted2WheelsOn",
@@ -583,14 +584,14 @@
       "payload_name": "DIV3_AIRPORT_ID",
       "response_name": "DIV3_AIRPORT_ID",
       "has_lookup": true,
-      "lookup": "aviation.airport_id"
+      "lookup": "aviation.l_airport_id"
     },
     {
       "name": "Diverted3AirportSeqID",
       "payload_name": "DIV3_AIRPORT_SEQ_ID",
       "response_name": "DIV3_AIRPORT_SEQ_ID",
       "has_lookup": true,
-      "lookup": "aviation.airport_seq_id"
+      "lookup": "aviation.l_airport_seq_id"
     },
     {
       "name": "Diverted3WheelsOn",
@@ -633,14 +634,14 @@
       "payload_name": "DIV4_AIRPORT_ID",
       "response_name": "DIV4_AIRPORT_ID",
       "has_lookup": true,
-      "lookup": "aviation.airport_id"
+      "lookup": "aviation.l_airport_id"
     },
     {
       "name": "Diverted4AirportSeqID",
       "payload_name": "DIV4_AIRPORT_SEQ_ID",
       "response_name": "DIV4_AIRPORT_SEQ_ID",
       "has_lookup": true,
-      "lookup": "aviation.airport_seq_id"
+      "lookup": "aviation.l_airport_seq_id"
     },
     {
       "name": "Diverted4WheelsOn",
@@ -683,14 +684,14 @@
       "payload_name": "DIV5_AIRPORT_ID",
       "response_name": "DIV5_AIRPORT_ID",
       "has_lookup": true,
-      "lookup": "aviation.airport_id"
+      "lookup": "aviation.l_airport_id"
     },
     {
       "name": "Diverted5AirportSeqID",
       "payload_name": "DIV5_AIRPORT_SEQ_ID",
       "response_name": "DIV5_AIRPORT_SEQ_ID",
       "has_lookup": true,
-      "lookup": "aviation.airport_seq_id"
+      "lookup": "aviation.l_airport_seq_id"
     },
     {
       "name": "Diverted5WheelsOn",

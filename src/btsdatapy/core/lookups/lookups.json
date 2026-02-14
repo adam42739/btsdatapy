@@ -1,7 +1,7 @@
 [
   {
     "type": "data",
-    "name": "months",
+    "name": "l_months",
     "mapping": {
       "1": "January",
       "2": "February",
@@ -19,7 +19,7 @@
   },
   {
     "type": "data",
-    "name": "day_of_week",
+    "name": "l_day_of_week",
     "mapping": {
       "1": "Monday",
       "2": "Tuesday",

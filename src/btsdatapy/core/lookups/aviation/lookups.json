@@ -1,61 +1,61 @@
 [
   {
     "type": "fetch",
-    "name": "unique_carriers",
+    "name": "l_unique_carriers",
     "lookup_id": "L_unIquE_CArrIErs",
     "rot13": true
   },
   {
     "type": "fetch",
-    "name": "airline_id",
+    "name": "l_airline_id",
     "lookup_id": "L_AIrLInE_ID",
     "rot13": true
   },
   {
     "type": "fetch",
-    "name": "carrier_history",
+    "name": "l_carrier_history",
     "lookup_id": "L_CArrIEr_HIstory",
     "rot13": true
   },
   {
     "type": "fetch",
-    "name": "airport_seq_id",
+    "name": "l_airport_seq_id",
     "lookup_id": "L_AIrport_sEq_ID",
     "rot13": true
   },
   {
     "type": "fetch",
-    "name": "city_market_id",
+    "name": "l_city_market_id",
     "lookup_id": "L_CIty_MArKEt_ID",
     "rot13": true
   },
   {
     "type": "fetch",
-    "name": "airport_id",
+    "name": "l_airport_id",
     "lookup_id": "L_AIrport_ID",
     "rot13": true
   },
   {
     "type": "fetch",
-    "name": "airport",
+    "name": "l_airport",
     "lookup_id": "L_AIrport",
     "rot13": true
   },
   {
     "type": "fetch",
-    "name": "airport_state_abr",
+    "name": "l_airport_state_abr",
     "lookup_id": "L_stAtE_ABr_AvIAtIon",
     "rot13": true
   },
   {
     "type": "fetch",
-    "name": "state_fips",
+    "name": "l_state_fips",
     "lookup_id": "L_stAtE_FIps",
     "rot13": true
   },
   {
     "type": "fetch",
-    "name": "world_area_code",
+    "name": "l_world_area_code",
     "lookup_id": "L_worLD_ArEA_CoDEs",
     "rot13": true
   }

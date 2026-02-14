@@ -1,8 +1,22 @@
+def rot13(s: str) -> str:
+    result = []
+    for char in s:
+        if "a" <= char <= "z":
+            offset = ord("a")
+            result.append(chr((ord(char) - offset + 13) % 26 + offset))
+        elif "A" <= char <= "Z":
+            offset = ord("A")
+            result.append(chr((ord(char) - offset + 13) % 26 + offset))
+        else:
+            result.append(char)
+    return "".join(result)
+
+
 def iterate_year_months(
     start: tuple[int, int],
     end: tuple[int, int],
     year_key: str = "cboYear",
-    month_key: str = "cboMonth",
+    month_key: str = "cboPeriod",
 ) -> list[dict[str, str]]:
     start_year, start_month = start
     end_year, end_month = end
