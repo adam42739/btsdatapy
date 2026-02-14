@@ -2,7 +2,7 @@ from tempfile import TemporaryDirectory
 
 import pandas as pd
 import pytest
-from btsdatapy.core.utils import cache
+from btsdatapy.core import cache
 
 TEST_DF_DICT = {"col1": ["val1"], "col2": ["val2"]}
 TEST_DF = pd.DataFrame(TEST_DF_DICT)
@@ -24,11 +24,15 @@ def test_cache_roundtrip_success():
     with TemporaryDirectory() as temp_dir:
         cache.set_cache_dir(temp_dir)
 
-        cache.write_cache(TEST_DF, TEST_USER_PARAMETERS, table_id=TEST_TABLE)
+        cache.write_cache(
+            TEST_DF, user_parameters=TEST_USER_PARAMETERS, table_id=TEST_TABLE
+        )
 
         assert cache.is_cached(TEST_USER_PARAMETERS, table_id=TEST_TABLE) is True
 
-        loaded = cache.read_cache(TEST_USER_PARAMETERS, table_id=TEST_TABLE)
+        loaded = cache.read_cache(
+            user_parameters=TEST_USER_PARAMETERS, table_id=TEST_TABLE
+        )
         assert loaded.to_dict("list") == TEST_DF_DICT
 
 
@@ -36,10 +40,10 @@ def test_cache_roundtrip_failure():
     with TemporaryDirectory() as temp_dir:
         cache.set_cache_dir(temp_dir)
 
-        cache.write_cache(TEST_DF, TEST_USER_PARAMETERS, lookup_id=TEST_LOOKUP)
+        cache.write_cache(TEST_DF, lookup_id=TEST_LOOKUP)
 
         with pytest.raises(FileNotFoundError):
-            cache.read_cache(TEST_USER_PARAMETERS, table_id=TEST_TABLE)
+            cache.read_cache(user_parameters=TEST_USER_PARAMETERS, table_id=TEST_TABLE)
 
 
 def test_cache_invalid_params():
@@ -49,7 +53,7 @@ def test_cache_invalid_params():
         with pytest.raises(ValueError):
             cache.write_cache(
                 TEST_DF,
-                TEST_USER_PARAMETERS,
+                user_parameters=TEST_USER_PARAMETERS,
                 table_id=TEST_TABLE,
                 lookup_id=TEST_LOOKUP,
             )

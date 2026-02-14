@@ -1,31 +1,31 @@
 [
   {
     "type": "fetch",
-    "name": "delay_groups",
+    "name": "l_delay_groups",
     "lookup_id": "L_ontIME_DELAy_Groups",
     "rot13": true
   },
   {
     "type": "fetch",
-    "name": "departure_time_block",
+    "name": "l_departure_time_block",
     "lookup_id": "L_DEpArrBLK",
     "rot13": true
   },
   {
     "type": "fetch",
-    "name": "cancelation_codes",
+    "name": "l_cancelation_codes",
     "lookup_id": "L_CAnCELLAtIon",
     "rot13": true
   },
   {
     "type": "fetch",
-    "name": "distance_group",
+    "name": "l_distance_group",
     "lookup_id": "L_DIstAnCE_Group_SVQ",
     "rot13": true
   },
   {
     "type": "fetch",
-    "name": "diverted_landings",
+    "name": "l_diverted_landings",
     "lookup_id": "L_DIvErsIons",
     "rot13": true
   }

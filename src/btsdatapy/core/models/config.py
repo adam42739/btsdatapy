@@ -1,10 +1,14 @@
+from enum import Enum
+
 from btsdatapy.core.constants import (
+    ASP_DOWNLOAD_LOOKUP,
     ASP_DOWNLOAD_TABLE,
+    ASP_LOOKUP_PARAM,
     ASP_SH146_NAME_PARAM,
     ASP_TABLE_ID_PARAM,
     BASE_URL,
 )
-from btsdatapy.core.utils.obfuscation import rot13
+from btsdatapy.core.utils import rot13
 from pydantic import BaseModel
 
 
@@ -45,7 +49,7 @@ class BtsTableConfig(BaseModel):
     columns: list[BtsTableColumn]
 
     def get_column_name_mapping(self) -> dict[str, str]:
-        return {col.payload_name: col.name for col in self.columns}
+        return {col.response_name: col.name for col in self.columns}
 
     def get_url(self) -> str:
         table_id = (
@@ -65,9 +69,25 @@ class BtsTableConfig(BaseModel):
         )
 
 
+class BtsLookupType(Enum):
+    FETCH = "fetch"
+    DATA = "data"
+
+
 class BtsLookupConfig(BaseModel):
-    type: str
+    type: BtsLookupType
     name: str
     lookup_id: str | None = None
     rot13: bool | None = None
     mapping: dict[str, str] | None = None
+
+    def get_url(self) -> str | None:
+        if self.type != BtsLookupType.FETCH or not self.lookup_id:
+            return None
+
+        if self.rot13:
+            lookup_param = f"{ASP_LOOKUP_PARAM}={rot13(self.lookup_id)}"
+        else:
+            lookup_param = f"{ASP_LOOKUP_PARAM}={self.lookup_id}"
+
+        return f"{BASE_URL}{ASP_DOWNLOAD_LOOKUP}{lookup_param}"

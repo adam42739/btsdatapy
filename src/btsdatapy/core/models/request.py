@@ -1,10 +1,4 @@
-from btsdatapy.core.constants import (
-    ASP_DOWNLOAD_LOOKUP,
-    ASP_LOOKUP_PARAM,
-    BASE_URL,
-    CONTENT_TYPE,
-    USER_AGENT,
-)
+from btsdatapy.core.constants import BASE_URL, CONTENT_TYPE, USER_AGENT
 from btsdatapy.core.models.config import BtsTableConfig
 
 
@@ -65,12 +59,3 @@ class BtsTableRequest:
                 payload[column.payload_name] = "on"
 
         return payload
-
-
-class BtsLookupRequest:
-    def __init__(self, value: str, rot13: bool):
-        self.value = value
-        self.rot13 = rot13
-
-    def get_url(self) -> str:
-        return f"{BASE_URL}{ASP_DOWNLOAD_LOOKUP}{ASP_LOOKUP_PARAM}={self.value}"

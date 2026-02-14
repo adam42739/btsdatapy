@@ -19,27 +19,26 @@ def _serialize_user_parameters(user_parameters: dict[str, str]) -> str:
 
 
 def _get_path(
-    user_parameters: dict[str, str],
+    user_parameters: dict[str, str] | None = None,
     table_id: str | None = None,
     lookup_id: str | None = None,
 ) -> Path:
-    path_id = _serialize_user_parameters(user_parameters)
-
-    if table_id and not lookup_id:
+    if user_parameters and table_id and not lookup_id:
+        path_id = _serialize_user_parameters(user_parameters)
         path = SETTINGS.cache_dir / "tables" / table_id / path_id
-    elif lookup_id and not table_id:
-        path = SETTINGS.cache_dir / "lookups" / lookup_id / path_id
+    elif lookup_id and not user_parameters and not table_id:
+        path = SETTINGS.cache_dir / "lookups" / lookup_id
     else:
         raise ValueError(
             "Invalid combination of parameters for cache path. "
-            "Must specify either `table_id` or `lookup_id`."
+            "Must specify either (`user_parameters`, `table_id`) or `lookup_id`."
         )
 
     return path.with_suffix(".parquet")
 
 
 def is_cached(
-    user_parameters: dict[str, str],
+    user_parameters: dict[str, str] | None = None,
     table_id: str | None = None,
     lookup_id: str | None = None,
 ) -> bool:
@@ -48,21 +47,25 @@ def is_cached(
 
 
 def read_cache(
-    user_parameters: dict[str, str],
+    user_parameters: dict[str, str] | None = None,
     table_id: str | None = None,
     lookup_id: str | None = None,
 ) -> pd.DataFrame:
-    if not is_cached(user_parameters, table_id, lookup_id):
+    if not is_cached(
+        user_parameters=user_parameters, table_id=table_id, lookup_id=lookup_id
+    ):
         raise FileNotFoundError("Requested cache file does not exist.")
 
-    path = _get_path(user_parameters, table_id, lookup_id)
+    path = _get_path(
+        user_parameters=user_parameters, table_id=table_id, lookup_id=lookup_id
+    )
 
     return pd.read_parquet(path)
 
 
 def write_cache(
     df: pd.DataFrame,
-    user_parameters: dict[str, str],
+    user_parameters: dict[str, str] | None = None,
     table_id: str | None = None,
     lookup_id: str | None = None,
 ):

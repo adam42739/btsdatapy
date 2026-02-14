@@ -1,6 +1,6 @@
 from pathlib import Path
 
-from btsdatapy.core.utils.obfuscation import rot13
+from btsdatapy.core.utils import rot13
 
 BASE_URL = "https://www.transtats.bts.gov/"
 

@@ -1,4 +1,4 @@
-from src.btsdatapy.core.utils.dates import iterate_year_months
+from src.btsdatapy.core.utils import iterate_year_months, rot13
 
 
 def test_iterate_year_months():
@@ -26,3 +26,7 @@ def test_iterate_year_months():
     result = list(iterate_year_months(start, end))
 
     assert result == expected
+
+
+def test_rot13():
+    assert rot13("Hello World!") == "Uryyb Jbeyq!"
